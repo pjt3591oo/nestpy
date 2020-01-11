@@ -1,2 +1,2 @@
 def create(appModule):
-  return '1'
+  return appModule()

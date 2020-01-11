@@ -12,9 +12,25 @@ NestPy를 사용한 프로젝트는 비즈니스 로직을 담당하는 **`Servi
 
 ## Module
 
+```py
+from nestpy.common.Module import Module
+@Module({
+  "imports": [],
+  "providers": [{
+    "name": "AppService",
+    "provider": AppService
+  }],
+  "exports": [],
+  "controllers": []
+})
+class AppModule :
+  def __init__(self):
+    pass
+```
+
 ## Controller
 
-## Server
+## Service
 
 ```py
 from nestpy.common import Injectable
