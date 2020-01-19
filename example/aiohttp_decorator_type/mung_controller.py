@@ -4,8 +4,6 @@ from aiohttp import web
 @Controller('/')
 class MungController(object):
 
-  url_rules = []
-
   def __init__(self):
     pass
 
