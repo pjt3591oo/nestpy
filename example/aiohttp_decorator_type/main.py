@@ -1,5 +1,5 @@
 from nest import NestFactory
-from mung_module import MungModule
+from app_module import AppModule
 
-app = NestFactory(MungModule).create()
+app = NestFactory(AppModule).create()
 app.start(3000)
