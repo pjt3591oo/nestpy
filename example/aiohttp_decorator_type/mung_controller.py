@@ -8,9 +8,13 @@ class MungController(object):
     pass
 
   @Get('')
-  def my_func_a(self):
+  def my_func_a(req):
+    print(req.headers)
+    print(req.rel_url.query.get('name', ''))
     return web.Response(text='/ get test')
 
   @Post('')
-  def my_func_c(self):
+  def my_func_c(req):
+    print(req.body_exists)
+    print(req.match_info.get('name', ''))
     return web.Response(text='/ post test')

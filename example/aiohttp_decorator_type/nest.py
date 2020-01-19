@@ -17,9 +17,10 @@ def Get(path):
         "handle": func,
         "method": "get"
     })
+    
     @wraps(func)
-    def __wrapper(self, *args, **kwargs):
-      return func(self, *args, **kwargs)
+    def __wrapper(req):
+      return func(req)
     return __wrapper
   return params
 
