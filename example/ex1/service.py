@@ -9,4 +9,5 @@ class AppService:
     self.a = 1000
 
   def get_data(self):
-    print(self.a)
+    # print(self.a)
+    pass

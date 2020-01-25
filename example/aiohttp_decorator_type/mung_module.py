@@ -2,7 +2,7 @@ from mung_controller import MungController
 from nest import Module
 
 @Module({
-  'controller': MungController
+  'controllers': MungController
 })
 class MungModule:
   

@@ -4,7 +4,7 @@ from mung_module import MungModule
 from mung_module2 import MungModule2
 
 @Module({
-  'import': [
+  'imports': [
     MungModule,
     MungModule2
   ]

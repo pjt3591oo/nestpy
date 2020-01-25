@@ -8,9 +8,9 @@ class MungController2(object):
     pass
 
   @Get('')
-  def my_func_a(req):
+  def my_func_a(self, req):
     return web.Response(text='/m get test')
 
   @Post('')
-  def my_func_c(req):
+  def my_func_c(self, req):
     return web.Response(text='/m post test')
