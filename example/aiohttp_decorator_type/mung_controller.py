@@ -5,16 +5,16 @@ from aiohttp import web
 class MungController(object):
 
   def __init__(self):
-    self.a = 1000
+    pass
 
   @Get('')
   def my_func_a(self, req):
     # print(req.headers)
     # print(req.rel_url.query.get('name', ''))
-    print('self', self, self.a)
     print('req', req.rel_url.query.get('name1', ''))
     print('req', req.rel_url.query.get('name2', ''))
-    print()
+    print(self.test)
+    print(self.test1())
     return web.Response(text='/ get test')
 
   @Post('')

@@ -5,6 +5,7 @@ import types, os
 from pathlib import Path
 
 PATHS = {}
+MODULE_MAPS = {}
 CONTROLLER_MAPS = {}
 
 def Get(path):
@@ -47,7 +48,6 @@ def Post(path):
 def Controller(path):
   def params(func):
     func.path = path
-    CONTROLLER_MAPS[func.__name__] = func()
     
     @wraps(func)
     def __wrapper(*args, **kwargs):
@@ -62,9 +62,12 @@ def Module(option):
   exports = option.get('exports', [])
   providers = option.get('providers', [])
   
+  # controller가 없는경우
   if not type(controllers) == types.FunctionType and not len(controllers):
     def _func(func):
       func.imports = imports
+      func.exports = exports
+      func.providers = providers
       @wraps(func)
       def __wrapper(*args, **kwargs):
         return func(*args, **kwargs)
@@ -73,12 +76,19 @@ def Module(option):
 
     return _func
 
-  else:
-    def _func(func):
+  else: # controller가 있는경우
+    def _func(func): 
       if not hasattr(func, 'controllers') or not isinstance(func.controllers, list):
         func.controllers =  []
-
+      
+      func.imports = imports
+      func.exports = exports
+      func.providers = providers
       func.controllers.append(controllers)
+      
+      MODULE_MAPS[controllers.__name__] = func
+      CONTROLLER_MAPS[controllers.__name__] = controllers
+
       @wraps(func)
       def __wrapper(*args, **kwargs):
         return func(*args, **kwargs)
@@ -101,8 +111,8 @@ class NestFactory:
       for controller in root_import_of_module.controllers:
         
         paths = PATHS[controller.__name__]
-        controller_instance = controller()
-        
+        controller_instance = self.inject_provider_from_controller(controller)
+
         for path in paths:
           base_path = controller.path
           method = path['method'].upper()
@@ -122,10 +132,29 @@ class NestFactory:
           elif method == 'POST':
             self.routes_map.append(web.post(p, getattr(controller_instance, handle.__name__)))
 
-    
-
     print(log_style.WHITE(''))
     return self
+
+  def inject_provider_from_controller(self, controller):
+    controller_name = controller.__name__
+    modules = MODULE_MAPS
+    controller = CONTROLLER_MAPS[controller_name]
+    module = MODULE_MAPS[controller_name]
+    providers = module.providers
+    c = controller()
+
+    print(modules, controller, controller_name, providers)
+    for provider in providers:
+      p = provider['provider']
+      useClass = provider.get('useClass', None)
+      useValue = provider.get('useValue', None)
+      print('>>>>', p, useClass, useValue)
+      if useClass:
+        setattr(c, p, useClass)
+      else :
+        setattr(c, p, useValue)
+      print('<<<<<<<')
+    return c
 
   def start(self, port):
     print(log_style.GREEN("[Nest] -   ") + log_style.YELLOW("[NestFactory]    ") + log_style.GREEN("Started Nest Application"))
