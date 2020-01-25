@@ -144,13 +144,20 @@ class NestFactory:
     c = controller()
 
     for provider in providers:
-      p = provider['provider']
-      useClass = provider.get('useClass', None)
-      useValue = provider.get('useValue', None)
-      if useClass:
-        setattr(c, p, useClass)
-      else :
-        setattr(c, p, useValue)
+      print(controller_name, type(provider), provider)
+      p = None
+      useClass = None
+      useValue = None
+      if isinstance(provider, dict):
+        p = provider['provider']
+        useClass = provider.get('useClass', None)
+        useValue = provider.get('useValue', None)
+        if useClass:
+          setattr(c, p, useClass)
+        else :
+          setattr(c, p, useValue)
+      else:
+        setattr(c, provider.__name__, provider())
     return c
 
   def start(self, port):

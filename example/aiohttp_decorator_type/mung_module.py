@@ -1,5 +1,6 @@
 from mung_controller import MungController
 from nest import Module
+from mung_service import MungService
 
 def a():
   print('hello world hahahahahahahahahahaha')
@@ -13,7 +14,8 @@ def a():
     }, {
       'provider': 'test1',
       'useClass': a
-    } 
+    } ,
+    MungService
   ]
 })
 class MungModule:
