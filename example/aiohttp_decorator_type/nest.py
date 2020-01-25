@@ -143,17 +143,14 @@ class NestFactory:
     providers = module.providers
     c = controller()
 
-    print(modules, controller, controller_name, providers)
     for provider in providers:
       p = provider['provider']
       useClass = provider.get('useClass', None)
       useValue = provider.get('useValue', None)
-      print('>>>>', p, useClass, useValue)
       if useClass:
         setattr(c, p, useClass)
       else :
         setattr(c, p, useValue)
-      print('<<<<<<<')
     return c
 
   def start(self, port):
@@ -162,3 +159,11 @@ class NestFactory:
 
     self.app.add_routes(self.routes_map)
     web.run_app(self.app, port=port)
+
+def Response(payload, *args, **kwargs):
+  status = kwargs.get('status', 200)
+  headers = kwargs.get('headers', {})
+  if isinstance(payload, str):
+    return web.Response(text=payload, status=status, headers=headers)
+  else:
+    return web.json_response(payload, status=status, headers=headers)
